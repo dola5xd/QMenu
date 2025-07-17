@@ -4,9 +4,9 @@ import { usePathname } from "next/navigation";
 import type { HTMLAttributes } from "react";
 
 const pathTitleMap: Record<string, string> = {
-  "/Designs": "Home",
-  "/Designs/menus": "My Menus",
-  "/Designs/qrcodes": "My QR Codes",
+  "/designs": "Home",
+  "/designs/menus": "My Menus",
+  "/designs/qrcodes": "My QR Codes",
 };
 
 type CurrentPageHeadProps = HTMLAttributes<HTMLHeadingElement>;

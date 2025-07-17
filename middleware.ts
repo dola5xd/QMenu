@@ -14,16 +14,16 @@ export async function middleware(req: NextRequest) {
   const isAuthPage =
     pathname.startsWith("/login") || pathname.startsWith("/register");
   const isProtectedPage =
-    pathname.startsWith("/Designs") || pathname.startsWith("/menu");
+    pathname.startsWith("/designs") || pathname.startsWith("/menu");
 
   // 1️⃣ Not signed in, trying to access protected routes → send to /login
   if (!token && isProtectedPage) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  // 2️⃣ Already signed in, trying to hit sign-in or register → send to /Designs
+  // 2️⃣ Already signed in, trying to hit sign-in or register → send to /designs
   if (token && isAuthPage) {
-    return NextResponse.redirect(new URL("/Designs", req.url));
+    return NextResponse.redirect(new URL("/designs", req.url));
   }
 
   // 3️⃣ Otherwise, just let them through
@@ -31,5 +31,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/register", "/Designs", "/menu"],
+  matcher: ["/login", "/register", "/designs", "/menu"],
 };

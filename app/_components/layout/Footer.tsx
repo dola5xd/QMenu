@@ -4,7 +4,7 @@ import Button from "../ui/Landing/Button";
 
 function Footer() {
   return (
-    <footer className="relative flex flex-col items-center justify-center min-h-[50vh] px-6 pt-44 pb-20 overflow-x-hidden text-sm bg-primary text-secondary sm:px-12 md:px-20">
+    <footer className="relative flex flex-col items-center justify-center overflow-hiddenS px-6 pt-44 pb-20 overflow-x-hidden text-sm bg-primary text-secondary sm:px-12 md:px-20">
       <Waves className="absolute inset-0 h-screen overflow-hidden" />
       <div className="z-0 grid grid-cols-1 gap-10 mx-auto max-w-7xl sm:grid-cols-2 md:grid-cols-4">
         <div className="flex flex-col gap-y-3">

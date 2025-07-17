@@ -1,23 +1,33 @@
+import { getServerSession } from "next-auth";
+import { getMenusByUser } from "@/_actions/getMenus";
+import { MenuData } from "@/_actions/createMenu";
 import FiltersBar from "@/_components/ui/Filters";
+import CreateMenuDialog from "@/_components/designs/DesignSelection";
+import { authOptions } from "@/_lib/authOptions";
 
-import CreateMenuDialog from "@/_components/Designs/DesignSelection";
-function Page() {
+export default async function Page() {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id;
+
+  let menus: MenuData[] = [];
+
+  if (userId) {
+    const result = await getMenusByUser(userId);
+    if ("data" in result) {
+      menus = result.data;
+    } else {
+      console.error("Error fetching menus:", result.error);
+    }
+  }
+
   return (
     <section className="px-10 py-2">
       <header className="flex items-center justify-between pr-10">
-        <h2 className="text-xl font-semibold ">Your Menus</h2>
+        <h2 className="text-xl font-semibold">Your Menus</h2>
         <CreateMenuDialog />
       </header>
-      <div className="flex flex-col gap-y-7">
-        <FiltersBar />
-        <section className="grid grid-cols-3 gap-10 items-center justify-center min-h-[50vh]">
-          <p className="text-3xl col-span-3 text-center">
-            No Menus in your account!
-          </p>
-        </section>
-      </div>
+
+      <FiltersBar menus={menus} />
     </section>
   );
 }
-
-export default Page;

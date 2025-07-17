@@ -58,11 +58,11 @@ export default function RegisterPage() {
     });
     toast.success("Registered successfully!");
 
-    router.push("/Designs");
+    router.push("/designs");
   };
 
   const handleGoogleRegister = async () => {
-    const res = await signIn("google", { callbackUrl: "/Designs" });
+    const res = await signIn("google", { callbackUrl: "/designs" });
     if (res?.ok) toast.success("Logged in sucessfully!");
   };
 

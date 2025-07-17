@@ -2,7 +2,7 @@ import Link from "next/link";
 import Logo from "../ui/Logo";
 import Button from "../ui/Landing/Button";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/api/auth/[...nextauth]/route";
+import { authOptions } from "@/_lib/authOptions";
 import UserActions from "../ui/UserActions";
 
 async function Header() {

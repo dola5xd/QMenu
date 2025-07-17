@@ -1,4 +1,4 @@
-import { authOptions } from "@/api/auth/[...nextauth]/route";
+import { authOptions } from "@/_lib/authOptions";
 import { getServerSession } from "next-auth";
 import { NavUser } from "./NavUser";
 import CurrentPageHead from "./CurrentPageHead";
