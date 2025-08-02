@@ -24,6 +24,7 @@ export type MenuData = {
   updatedAt?: number;
   name?: string;
   categories?: Category[];
+  pdfUrl?: string;
 };
 
 export async function createMenu(data: MenuData) {

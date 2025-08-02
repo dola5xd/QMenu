@@ -164,7 +164,7 @@ const Squares: React.FC<SquaresProps> = ({
   return (
     <canvas
       ref={canvasRef}
-      className="w-full h-full border-none block absolute inset-0 z-0"
+      className="w-full h-full border-none block absolute inset-0 z-0 "
     ></canvas>
   );
 };

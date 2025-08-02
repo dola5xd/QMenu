@@ -1,21 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "framer-motion";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { Trash2Icon, Plus } from "lucide-react";
-import { ScrollArea } from "../ui/scroll-area";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { useSession } from "next-auth/react";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { ScrollArea } from "../ui/scroll-area";
+import { Plus, Trash2Icon } from "lucide-react";
+import { uploadToCloudinary } from "@/_lib/Cloudinary";
 import { createMenu, MenuData } from "@/_actions/createMenu";
 
-// Validation schema
 const itemSchema = z.object({
   name: z.string().min(1, "Item name is required"),
   price: z.string().min(1, "Price is required"),
@@ -31,6 +31,8 @@ const categorySchema = z.object({
 
 const schema = z.object({
   menuName: z.string().min(1, "Menu name is required"),
+  primaryColor: z.string().min(1, "Primary color is required"),
+  accentColor: z.string().min(1, "Accent color is required"),
   categories: z
     .array(categorySchema)
     .min(1, "At least one category is required"),
@@ -38,35 +40,45 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export default function MenuDetailsStep({
+export default function LogoAndDetailsStep({
   id,
   menu,
 }: {
   id: string;
   menu: MenuData | null;
 }) {
+  const { data: session } = useSession();
   const router = useRouter();
+
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(
+    menu?.logo || null
+  );
   const [newCategoryName, setNewCategoryName] = useState("");
   const [isUploading, setIsUploading] = useState(false);
-  const { data: session } = useSession();
+  const [logoError, setLogoError] = useState<string | null>(null);
 
   const {
-    control,
     register,
     handleSubmit,
-    reset,
+    control,
     watch,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { menuName: "", categories: [] },
+    defaultValues: {
+      menuName: menu?.name || "",
+      primaryColor: menu?.primaryColor || "#4e342e",
+      accentColor: menu?.accentColor || "#ff7043",
+      categories: menu?.categories || [],
+    },
   });
 
   const {
     fields: categories,
     append,
-    remove,
     update,
+    remove,
   } = useFieldArray({
     control,
     name: "categories",
@@ -75,13 +87,13 @@ export default function MenuDetailsStep({
   const watchedName = watch("menuName");
 
   useEffect(() => {
-    if (menu) {
-      reset({
-        menuName: menu.name ?? "",
-        categories: menu.categories ?? [],
-      });
+    if (logoFile) {
+      const objectUrl = URL.createObjectURL(logoFile);
+      setLogoPreview(objectUrl);
+      setLogoError(null);
+      return () => URL.revokeObjectURL(objectUrl);
     }
-  }, [menu, reset]);
+  }, [logoFile]);
 
   const handleAddCategory = () => {
     if (!newCategoryName.trim()) {
@@ -101,9 +113,9 @@ export default function MenuDetailsStep({
     update(catIndex, { ...c, items: [...c.items, { name: "", price: "" }] });
   };
 
-  const handleRemoveItem = (catIndex: number, idx: number) => {
+  const handleRemoveItem = (catIndex: number, itemIndex: number) => {
     const c = categories[catIndex];
-    const newItems = c.items.filter((_, i) => i !== idx);
+    const newItems = c.items.filter((_, i) => i !== itemIndex);
     update(catIndex, { ...c, items: newItems });
   };
 
@@ -113,70 +125,124 @@ export default function MenuDetailsStep({
       router.push("/login");
       return;
     }
-    if (!menu?.logo || !menu.primaryColor || !menu.accentColor) {
-      toast.error("Missing logo/colors – go back to step 1");
-      router.push(`/menus/create?id=${id}&step=1`);
+
+    if (!logoFile && !menu?.logo) {
+      setLogoError("Logo is required");
+      toast.error("Please upload a logo");
       return;
     }
 
     setIsUploading(true);
-    const res = await createMenu({
-      ...menu,
-      id,
-      logo: menu.logo,
-      primaryColor: menu.primaryColor,
-      accentColor: menu.accentColor,
-      userId: session.user.id,
-      name: data.menuName,
-      categories: data.categories,
-      status: "private",
-    });
-    setIsUploading(false);
+    try {
+      let logoUrl = menu?.logo || null;
+      if (logoFile) {
+        logoUrl = await uploadToCloudinary(logoFile);
+      }
 
-    if ("error" in res) {
-      toast.error(res.error ?? "");
-      return;
+      const res = await createMenu({
+        ...menu,
+        id,
+        logo: logoUrl,
+        primaryColor: data.primaryColor,
+        accentColor: data.accentColor,
+        userId: session.user.id,
+        name: data.menuName,
+        categories: data.categories,
+        status: "private",
+      });
+
+      if ("error" in res) {
+        toast.error(res.error ?? "");
+        return;
+      }
+
+      toast.success("Menu saved!");
+      router.push(`/menus/create?id=${id}&step=2`);
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Something went wrong");
+    } finally {
+      setIsUploading(false);
     }
-
-    toast.success("Menu saved!");
-    router.push(`/menus/create?id=${id}&step=3`);
   };
-
-  const isDarkOrLight = (color: string) =>
-    ["#ffffff", "#fff", "#000000", "#000"].includes(color.toLowerCase());
-
-  const backgroundColor = menu?.primaryColor || "#f8f8f8";
-  const textColor = menu?.accentColor || "#333";
 
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3 }}
-      className="grid grid-cols-1 md:grid-cols-2 gap-10 relative h-full"
+      className="grid grid-cols-1 md:grid-cols-2 gap-10 h-full"
     >
-      {/* Form Section */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-y-6 h-full"
+        className="flex flex-col gap-y-6 justify-center h-full"
       >
-        <div className="flex flex-col gap-y-1.5">
-          <h1 className="text-4xl font-bold">Step 2</h1>
-          <p className="text-muted-foreground">Add categories and items</p>
-        </div>
+        <h1 className="text-4xl font-bold">Menu Details</h1>
+        <p className="text-muted-foreground mb-4">
+          Upload logo, pick colors, and create your menu
+        </p>
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-primary">
+              Upload Logo
+            </label>
 
+            <div className="relative border-2 border-dashed border-muted-foreground/30 rounded-lg p-4 flex items-center justify-center hover:border-primary transition cursor-pointer bg-muted">
+              <input
+                title="logo upload"
+                id="logo-upload"
+                type="file"
+                accept="image/*"
+                className="absolute inset-0 opacity-0 cursor-pointer"
+                onChange={(e) => setLogoFile(e.target.files?.[0] || null)}
+              />
+              <div className="text-sm text-muted-foreground">
+                {logoFile?.name || "Click to upload or drag an image here"}
+              </div>
+            </div>
+
+            {logoError && <p className="text-sm text-red-500">{logoError}</p>}
+          </div>
+
+          <div className="flex flex-col gap-y-4">
+            <div className="flex items-center gap-x-4">
+              <label className="text-sm font-medium ">Primary Color</label>
+              <Input
+                type="color"
+                className="w-16"
+                {...register("primaryColor")}
+              />
+              {errors.primaryColor && (
+                <p className="text-sm text-red-500">
+                  {errors.primaryColor.message}
+                </p>
+              )}
+            </div>
+            <div className="flex items-center gap-x-4">
+              <label className="text-sm font-medium w-1/2">Accent Color</label>
+              <Input
+                type="color"
+                className="w-16"
+                {...register("accentColor")}
+              />
+              {errors.accentColor && (
+                <p className="text-sm text-red-500">
+                  {errors.accentColor.message}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
         <div>
-          <label className="text-sm font-medium text-primary">Menu Name</label>
-          <Input {...register("menuName")} placeholder="e.g. Coffee Menu" />
+          <label className="text-sm font-medium">Menu Name</label>
+          <Input {...register("menuName")} placeholder="e.g. Cafe Delight" />
           {errors.menuName && (
             <p className="text-sm text-red-500">{errors.menuName.message}</p>
           )}
         </div>
 
         <div>
-          <label className="text-sm font-medium text-primary">
-            Add Category
-          </label>
+          <label className="text-sm font-medium">Add Category</label>
           <div className="flex gap-2">
             <Input
               value={newCategoryName}
@@ -194,111 +260,84 @@ export default function MenuDetailsStep({
           )}
         </div>
 
-        <div className="flex gap-4 mt-auto">
-          <Button
-            variant="outline"
-            type="button"
-            onClick={() => router.push(`/menus/create?id=${id}&step=1`)}
-          >
-            Back
-          </Button>
-          <Button
-            disabled={isUploading}
-            type="submit"
-            className="bg-accent text-white"
-          >
-            {isUploading ? "Saving..." : "Continue to Step 3"}
-          </Button>
-        </div>
+        <Button type="submit" disabled={isUploading} className="self-end mt-4">
+          {isUploading ? "Saving..." : "Continue to Preview"}
+        </Button>
       </form>
 
-      {/* Live Preview */}
-      <div className="flex flex-col gap-y-2 h-full">
-        <div
-          className="border rounded-lg py-4 px-6 flex flex-col h-full overflow-y-auto"
-          style={{
-            backgroundColor,
-            color: textColor,
-            ...(isDarkOrLight(backgroundColor) && {
-              border: "1px solid #ccc",
-            }),
-          }}
-        >
-          {menu?.logo && (
-            <div className="flex justify-center mb-4">
-              <Image
-                src={menu.logo}
-                alt="Logo"
-                width={100}
-                height={100}
-                className="rounded object-contain"
-              />
-            </div>
-          )}
-
-          <h2 className="text-xl font-bold text-center mb-4">
-            {watchedName || menu?.name || "Menu Name"}
-          </h2>
-
-          <ScrollArea className="max-h-[400px] pr-2">
-            {categories.map((cat, catIndex) => (
-              <div key={cat.id} className="border-b py-4 mb-2">
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="font-semibold text-lg">{cat.name}</h3>
+      {/* Right: Live Preview */}
+      <ScrollArea className="border rounded-lg p-6 bg-muted flex flex-col overflow-y-auto max-h-full">
+        {logoPreview ? (
+          <div className="flex justify-center mb-4">
+            <Image
+              src={logoPreview}
+              alt="Logo preview"
+              width={100}
+              height={100}
+              className="rounded object-contain max-h-24"
+            />
+          </div>
+        ) : (
+          <p className="text-sm text-center text-muted-foreground mb-4">
+            Logo preview will appear here
+          </p>
+        )}
+        <h2 className="text-xl font-bold text-center mb-4">
+          {watchedName || "Menu Name"}
+        </h2>
+        <div className="pr-2 min-h-[325px]">
+          {categories.map((cat, catIndex) => (
+            <div key={cat.id} className="mb-4">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="font-semibold">{cat.name}</h3>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => remove(catIndex)}
+                >
+                  <Trash2Icon size={16} />
+                </Button>
+              </div>
+              {cat.items.map((_, itemIndex) => (
+                <div key={itemIndex} className="flex gap-2 mb-2">
+                  <Input
+                    placeholder="Item name"
+                    {...register(
+                      `categories.${catIndex}.items.${itemIndex}.name`
+                    )}
+                  />
+                  <Input
+                    placeholder="Price"
+                    type="number"
+                    {...register(
+                      `categories.${catIndex}.items.${itemIndex}.price`
+                    )}
+                  />
                   <Button
                     size="icon"
                     variant="ghost"
-                    onClick={() => remove(catIndex)}
+                    className="text-red-500"
+                    onClick={() => handleRemoveItem(catIndex, itemIndex)}
                   >
                     <Trash2Icon size={16} />
                   </Button>
                 </div>
-
-                {cat.items.map((_, itemIndex) => (
-                  <div key={itemIndex} className="flex gap-2 mb-2 items-center">
-                    <Input
-                      placeholder="Item name"
-                      className="placeholder:text-muted-foreground"
-                      {...register(
-                        `categories.${catIndex}.items.${itemIndex}.name`
-                      )}
-                    />
-                    <Input
-                      placeholder="Price"
-                      type="number"
-                      className="placeholder:text-muted-foreground"
-                      {...register(
-                        `categories.${catIndex}.items.${itemIndex}.price`
-                      )}
-                    />
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="text-red-500 hover:bg-red-100"
-                      onClick={() => handleRemoveItem(catIndex, itemIndex)}
-                    >
-                      <Trash2Icon size={16} />
-                    </Button>
-                  </div>
-                ))}
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-0"
-                  onClick={() => handleAddItem(catIndex)}
-                >
-                  <Plus size={16} /> Add Item
-                </Button>
-              </div>
-            ))}
-          </ScrollArea>
-        </div>
-
-        <p className="text-sm italic text-center text-muted-foreground">
-          This is a live preview (not final layout)
+              ))}
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-2"
+                onClick={() => handleAddItem(catIndex)}
+              >
+                <Plus size={16} /> Add Item
+              </Button>
+            </div>
+          ))}
+        </div>{" "}
+        <p className="text-xs text-center italic text-muted-foreground mt-4">
+          This is a live preview
         </p>
-      </div>
+      </ScrollArea>
     </motion.div>
   );
 }

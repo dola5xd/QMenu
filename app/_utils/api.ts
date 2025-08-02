@@ -1,4 +1,5 @@
 import { db } from "../_lib/firebase-admin";
+import { DBUser } from "@/_lib/authOptions";
 
 export interface DbUser {
   id: string;
@@ -27,4 +28,20 @@ export async function getUserByEmail(email: string): Promise<DbUser | null> {
     hashedPassword: data.hashedPassword,
     createdAt: data.createdAt,
   };
+}
+
+export async function getUserByID(ID: string): Promise<DBUser | null> {
+  const snapshot = await db
+    .collection("users")
+    .where("id", "==", ID)
+    .limit(1)
+    .get();
+
+  console.log("ID: ", ID);
+  if (snapshot.empty) return null;
+
+  const doc = snapshot.docs[0];
+  const data = doc.data() as DBUser;
+
+  return data;
 }

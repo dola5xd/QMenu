@@ -13,11 +13,19 @@ import { EyeIcon, Grid2X2Icon, ListIcon, PenBoxIcon, X } from "lucide-react";
 import { MenuData } from "@/_actions/createMenu";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import CreateMenuDialog from "../designs/DesignSelection";
-import { Button } from "./button";
-import Link from "next/link";
 import toast from "react-hot-toast";
 import { deleteMenu } from "@/_actions/removeMenu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/_components/ui/dropdown-menu";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { Button } from "./button";
+import { updateMenuVisibility } from "@/_actions/updateMenu";
 
 interface Props {
   menus: MenuData[];
@@ -61,7 +69,6 @@ export default function FiltersBar({ menus }: Props) {
 
   async function handleRemoveMenu(id: string) {
     const res = await deleteMenu(id);
-
     if ("error" in res) {
       toast.error(res.error!);
     } else {
@@ -69,26 +76,44 @@ export default function FiltersBar({ menus }: Props) {
       router.refresh();
     }
   }
+
+  async function handleVisibilityChange(id: string, newStatus: string) {
+    const res = await updateMenuVisibility(
+      id,
+      newStatus as "public" | "private" | "archived"
+    );
+    if ("error" in res) {
+      toast.error(res.error ?? "");
+    } else {
+      toast.success(`Visibility updated to ${newStatus}`);
+      router.refresh();
+    }
+  }
+
   return (
     <>
-      <section className="flex items-center justify-between py-4 pr-10">
-        <div className="flex items-center gap-8">
+      {/* Filter Bar */}
+      <section className="flex flex-wrap items-center justify-between gap-4 px-2 py-4 sm:px-4 md:px-8">
+        <div className="flex flex-wrap items-center gap-6">
           {/* Visibility Filter */}
-          <div className="flex items-center gap-x-2">
+          <div className="flex items-center gap-2">
             <label
               htmlFor="visibility"
               className="text-sm font-medium text-primary"
             >
-              Filter by Visibility
+              Visibility
             </label>
-            <Select onValueChange={(val) => setVisibility(val)}>
-              <SelectTrigger
-                id="visibility"
-                className="w-[180px] border border-primary text-primary"
-              >
-                <SelectValue placeholder="Select Visibility" />
+            <Select
+              value={visibility ?? "all"}
+              onValueChange={(val) =>
+                setVisibility(val === "all" ? undefined : val)
+              }
+            >
+              <SelectTrigger className="w-[160px] border text-primary">
+                <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent className="bg-background">
+                <SelectItem value="all">All</SelectItem>
                 <SelectItem value="public">Public</SelectItem>
                 <SelectItem value="private">Private</SelectItem>
                 <SelectItem value="archived">Archived</SelectItem>
@@ -97,16 +122,13 @@ export default function FiltersBar({ menus }: Props) {
           </div>
 
           {/* Sort Filter */}
-          <div className="flex items-center gap-x-2">
+          <div className="flex items-center gap-2">
             <label htmlFor="sort" className="text-sm font-medium text-primary">
-              Sort by
+              Sort
             </label>
             <Select onValueChange={(val) => setSort(val)}>
-              <SelectTrigger
-                id="sort"
-                className="w-[180px] border border-primary text-primary"
-              >
-                <SelectValue placeholder="Select Sort" />
+              <SelectTrigger className="w-[160px] border text-primary">
+                <SelectValue placeholder="By Date/Name" />
               </SelectTrigger>
               <SelectContent className="bg-background">
                 <SelectItem value="newest">Newest</SelectItem>
@@ -118,62 +140,84 @@ export default function FiltersBar({ menus }: Props) {
           </div>
         </div>
 
-        {/* View Mode */}
-        <div className="flex items-center gap-2">
+        {/* View Toggle */}
+        <div className="flex gap-2">
           <Toggle
-            variant={"outline"}
+            variant="outline"
             pressed={viewMode === "grid"}
             onPressedChange={() => setViewMode("grid")}
           >
-            <Grid2X2Icon />
+            <Grid2X2Icon className="w-4 h-4" />
           </Toggle>
           <Toggle
-            variant={"outline"}
+            variant="outline"
             pressed={viewMode === "list"}
             onPressedChange={() => setViewMode("list")}
           >
-            <ListIcon />
+            <ListIcon className="w-4 h-4" />
           </Toggle>
         </div>
       </section>
 
-      {/* Menu Grid/List View */}
+      {/* Menu Display */}
       <section
-        className={`${
+        className={`min-h-[200px] ${
           viewMode === "grid"
-            ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-            : "flex flex-col gap-6"
-        } min-h-[200px]`}
+            ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            : "flex flex-col gap-4 justify-center w-1/2 mx-auto"
+        }`}
       >
         {filteredMenus.length === 0 ? (
-          <p className="flex flex-col items-center gap-y-2 text-2xl mt-auto col-span-full text-center text-muted-foreground">
-            No Menus found. <CreateMenuDialog />
+          <p className="py-10 text-lg text-center col-span-full text-muted-foreground">
+            No menus found.
           </p>
         ) : (
           filteredMenus.map((menu) => (
             <div
               key={menu.id}
-              className="flex flex-col rounded-lg border p-4 shadow ring ring-dark/5 hover:shadow-md transition"
+              className="flex flex-col justify-between p-4 transition border rounded-lg shadow-sm hover:shadow-md"
             >
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold">{menu.name}</h3>
-                <Image
-                  src={menu.logo!}
-                  height={100}
-                  width={100}
-                  alt={menu.name!}
-                  className="object-contain aspect-square"
-                />
+              <div className="flex items-center justify-between gap-2 mb-4">
+                <h3 className="text-lg font-semibold truncate max-w-[70%]">
+                  {menu.name}
+                </h3>
+                {menu.logo && (
+                  <Image
+                    src={menu.logo}
+                    alt={menu.name ?? ""}
+                    width={60}
+                    height={60}
+                    className="object-contain rounded-md aspect-square"
+                  />
+                )}
               </div>
-              <div className="mt-auto flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground capitalize">
-                    {menu.status}
-                  </p>
+
+              <div className="flex items-center justify-between mt-auto">
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <label className="text-xs text-muted-foreground">
+                      Visibility:
+                    </label>
+                    <Select
+                      value={menu.status}
+                      onValueChange={(val) =>
+                        handleVisibilityChange(menu.id, val)
+                      }
+                    >
+                      <SelectTrigger className="w-[120px] h-8 border text-xs text-muted-foreground">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background text-sm">
+                        <SelectItem value="public">Public</SelectItem>
+                        <SelectItem value="private">Private</SelectItem>
+                        <SelectItem value="archived">Archived</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                   <p className="text-xs text-muted-foreground">
                     Last Edit:{" "}
-                    {menu.createdAt
-                      ? new Date(menu.updatedAt!).toLocaleString("en-US", {
+                    {menu.updatedAt
+                      ? new Date(menu.updatedAt).toLocaleString("en-US", {
                           dateStyle: "medium",
                           timeStyle: "short",
                           timeZone: "Africa/Cairo",
@@ -181,27 +225,49 @@ export default function FiltersBar({ menus }: Props) {
                       : "Unknown"}
                   </p>
                 </div>
-                <div className="flex gap-x-2">
-                  <Link href={`/menu/${menu.id}`}>
-                    <Button title="visit" variant={"default"} size={"icon"}>
-                      <EyeIcon />
-                    </Button>
-                  </Link>
-                  <Link href={`/menus/create?id=${menu.id}&step=2`}>
-                    <Button title="edit" variant={"default"} size={"icon"}>
-                      <PenBoxIcon />
-                    </Button>
-                  </Link>
 
-                  <Button
-                    title="remove"
-                    variant={"destructive"}
-                    size={"icon"}
-                    onClick={() => handleRemoveMenu(menu.id)}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="p-1 rounded-md"
+                    >
+                      <BsThreeDotsVertical className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    side="bottom"
+                    align="end"
+                    className="bg-background"
+                    sideOffset={4}
                   >
-                    <X />
-                  </Button>
-                </div>
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem
+                        onSelect={() => router.push(`/menu/${menu.id}`)}
+                      >
+                        <EyeIcon className="w-4 h-4 mr-2" />
+                        Preview
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() =>
+                          router.push(`/menus/create?id=${menu.id}&step=2`)
+                        }
+                      >
+                        <PenBoxIcon className="w-4 h-4 mr-2" />
+                        Edit
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onSelect={async () => handleRemoveMenu(menu.id)}
+                      className="text-destructive"
+                    >
+                      <X className="w-4 h-4 mr-2 text-destructive" />
+                      Remove
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           ))

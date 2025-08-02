@@ -56,13 +56,19 @@ export default function LoginPage() {
 
   return (
     <main className="flex items-center justify-center h-screen px-6 py-20 text-secondary bg-dark">
-      <Squares
-        speed={0.25}
-        squareSize={50}
-        direction="diagonal"
-        borderColor="#d7ccc837"
-        hoverFillColor="#1c1c1c"
-      />
+      <div className="absolute w-full h-full">
+        {/* Squares background layer */}
+        <Squares
+          speed={0.25}
+          squareSize={50}
+          direction="diagonal"
+          borderColor="#d7ccc837" // already transparent
+          hoverFillColor="#1c1c1c"
+        />
+
+        {/* Gradient overlay layer to soften it */}
+        <div className="absolute inset-0 bg-gradient-to-br to-transparent via-dark/80 from-dark" />
+      </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="z-0 w-full max-w-md p-10 space-y-6 shadow-xl bg-dark/95 rounded-xl"
@@ -85,7 +91,7 @@ export default function LoginPage() {
             className="w-full px-4 py-2 mt-1 border rounded-md border-secondary focus:outline-none focus:ring-2 focus:ring-primary"
           />
           {errors.email && (
-            <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>
+            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
           )}
         </div>
 
@@ -99,7 +105,7 @@ export default function LoginPage() {
             className="w-full px-4 py-2 mt-1 border rounded-md border-secondary focus:outline-none focus:ring-2 focus:ring-primary"
           />
           {errors.password && (
-            <p className="text-sm text-red-500 mt-1">
+            <p className="mt-1 text-sm text-red-500">
               {errors.password.message}
             </p>
           )}
@@ -107,23 +113,23 @@ export default function LoginPage() {
         <div>
           <Button
             variants="custom"
-            className="bg-accent hover:bg-accent/75 text-white w-full"
+            className="w-full text-white bg-accent hover:bg-accent/75"
             type="submit"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Signing in..." : "Sign In"}
           </Button>
 
-          <div className="relative flex items-center justify-center text-xs text-secondary/50 my-2">
+          <div className="relative flex items-center justify-center my-2 text-xs text-secondary/50">
             <span className="absolute left-0 w-full border-t border-secondary/30" />
-            <span className="px-4 bg-dark z-10">OR</span>
+            <span className="z-10 px-4 bg-dark">OR</span>
           </div>
 
           <Button
             type="button"
             variants="custom"
             onClick={handleGoogleLogin}
-            className="flex items-center justify-center gap-3 w-full border border-secondary hover:bg-secondary/10 transition text-secondary"
+            className="flex items-center justify-center w-full gap-3 transition border border-secondary hover:bg-secondary/10 text-secondary"
           >
             <BsGoogle /> <span>Sign in with Google</span>
           </Button>
