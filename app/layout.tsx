@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Cairo } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./_providers/Providers";
-
 const InterFont = Inter({
   variable: "--font-inter",
   subsets: ["latin"],

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import tinycolor from "tinycolor2";
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -85,6 +86,8 @@ export default function LogoAndDetailsStep({
   });
 
   const watchedName = watch("menuName");
+  const primaryColor = watch("primaryColor");
+  const isDark = tinycolor(primaryColor).isDark();
 
   useEffect(() => {
     if (logoFile) {
@@ -265,78 +268,101 @@ export default function LogoAndDetailsStep({
         </Button>
       </form>
 
-      {/* Right: Live Preview */}
-      <ScrollArea className="border rounded-lg p-6 bg-muted flex flex-col overflow-y-auto max-h-full">
-        {logoPreview ? (
-          <div className="flex justify-center mb-4">
-            <Image
-              src={logoPreview}
-              alt="Logo preview"
-              width={100}
-              height={100}
-              className="rounded object-contain max-h-24"
-            />
-          </div>
-        ) : (
-          <p className="text-sm text-center text-muted-foreground mb-4">
-            Logo preview will appear here
-          </p>
-        )}
-        <h2 className="text-xl font-bold text-center mb-4">
-          {watchedName || "Menu Name"}
-        </h2>
-        <div className="pr-2 min-h-[325px]">
-          {categories.map((cat, catIndex) => (
-            <div key={cat.id} className="mb-4">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="font-semibold">{cat.name}</h3>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => remove(catIndex)}
+      <ScrollArea
+        className={`border rounded-lg p-6 flex flex-col overflow-y-auto max-h-full transition-colors`}
+        style={{ backgroundColor: primaryColor }}
+      >
+        <div className={`${isDark ? "text-white" : "text-black"}`}>
+          {logoPreview ? (
+            <div className="flex justify-center mb-4">
+              <Image
+                src={logoPreview}
+                alt="Logo preview"
+                width={100}
+                height={100}
+                className="rounded object-contain max-h-24"
+              />
+            </div>
+          ) : (
+            <p
+              className={`text-sm text-center mb-4 ${
+                isDark ? "text-gray-200" : "text-muted-foreground"
+              }`}
+            >
+              Logo preview will appear here
+            </p>
+          )}
+          <h2 className="text-xl font-bold text-center mb-4">
+            {watchedName || "Menu Name"}
+          </h2>
+
+          <div className="pr-2 min-h-[325px]">
+            {categories.map((cat, catIndex) => (
+              <div key={cat.id} className="mb-4">
+                <div
+                  className={`flex justify-between items-center mb-2 border-b pb-1 ${
+                    isDark ? "border-gray-400" : "border-gray-300"
+                  }`}
                 >
-                  <Trash2Icon size={16} />
-                </Button>
-              </div>
-              {cat.items.map((_, itemIndex) => (
-                <div key={itemIndex} className="flex gap-2 mb-2">
-                  <Input
-                    placeholder="Item name"
-                    {...register(
-                      `categories.${catIndex}.items.${itemIndex}.name`
-                    )}
-                  />
-                  <Input
-                    placeholder="Price"
-                    type="number"
-                    {...register(
-                      `categories.${catIndex}.items.${itemIndex}.price`
-                    )}
-                  />
+                  <h3 className="font-semibold">{cat.name}</h3>
                   <Button
-                    size="icon"
                     variant="ghost"
-                    className="text-red-500"
-                    onClick={() => handleRemoveItem(catIndex, itemIndex)}
+                    size="icon"
+                    className={isDark ? "text-white" : "text-black"}
+                    onClick={() => remove(catIndex)}
                   >
                     <Trash2Icon size={16} />
                   </Button>
                 </div>
-              ))}
-              <Button
-                variant="outline"
-                size="sm"
-                className="mt-2"
-                onClick={() => handleAddItem(catIndex)}
-              >
-                <Plus size={16} /> Add Item
-              </Button>
-            </div>
-          ))}
-        </div>{" "}
-        <p className="text-xs text-center italic text-muted-foreground mt-4">
-          This is a live preview
-        </p>
+
+                {cat.items.map((_, itemIndex) => (
+                  <div key={itemIndex} className="flex gap-2 mb-2">
+                    <Input
+                      placeholder="Item name"
+                      {...register(
+                        `categories.${catIndex}.items.${itemIndex}.name`
+                      )}
+                      className={`${isDark ? "text-white" : ""}`}
+                    />
+                    <Input
+                      placeholder="Price"
+                      type="number"
+                      {...register(
+                        `categories.${catIndex}.items.${itemIndex}.price`
+                      )}
+                      className={`${isDark ? "text-white" : ""}`}
+                    />
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="text-red-500"
+                      onClick={() => handleRemoveItem(catIndex, itemIndex)}
+                    >
+                      <Trash2Icon size={16} />
+                    </Button>
+                  </div>
+                ))}
+
+                <Button
+                  variant={isDark ? "secondary" : "outline"}
+                  size="sm"
+                  className={`mt-2 `}
+                  onClick={() => handleAddItem(catIndex)}
+                >
+                  <Plus size={16} /> Add Item
+                </Button>
+              </div>
+            ))}
+          </div>
+
+          <p
+            className={`text-xs text-center italic mt-4 ${
+              isDark ? "text-gray-300" : "text-muted-foreground"
+            }`}
+          >
+            This is a live preview
+          </p>
+        </div>
       </ScrollArea>
     </motion.div>
   );

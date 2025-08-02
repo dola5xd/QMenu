@@ -92,7 +92,7 @@ export default function MenuClient({ menu, isOwner }: Props) {
             </Button>
           </div>
 
-          <Link href={`/menus/create?id=${menu.id}&step=2`}>
+          <Link href={`/menus/create?id=${menu.id}&step=1`}>
             <Button variant="destructive">
               <PenBoxIcon className="w-4 h-4" /> Edit Menu
             </Button>
