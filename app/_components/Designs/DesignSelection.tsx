@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import { Button } from "../ui/button";
 
-export default function CreateMenuDialog() {
+function DesignSelection() {
   const router = useRouter();
 
   const handleSelect = () => {
@@ -19,3 +19,5 @@ export default function CreateMenuDialog() {
     </Button>
   );
 }
+
+export default DesignSelection;
