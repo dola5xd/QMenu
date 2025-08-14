@@ -23,8 +23,8 @@ export default async function Page({
   const menu = res.data ?? null;
 
   return (
-    <main className="flex items-center justify-center p-6 w-screen h-screen font-cairo bg-background">
-      <section className="h-full bg-gradient-to-br from-[#fffdf8] to-[#fef8e8] shadow-md rounded-2xl p-10 w-full">
+    <main className="w-full min-h-screen p-0 sm:p-6 font-cairo bg-background">
+      <section className="bg-gradient-to-br from-[#fffdf8] to-[#fef8e8] shadow-md rounded-none sm:rounded-2xl px-4 py-7 sm:py-5 sm:px-5 lg:p-10 w-full max-w-7xl mx-auto">
         {step === 1 && <MenuDetailsStep id={id} menu={menu} />}
         {step === 2 && <ConfirmStep id={id} menu={menu} />}
       </section>

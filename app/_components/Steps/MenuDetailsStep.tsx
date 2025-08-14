@@ -175,23 +175,25 @@ export default function LogoAndDetailsStep({
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3 }}
-      className="grid grid-cols-1 md:grid-cols-2 gap-10 h-full"
+      className="flex flex-col w-full h-full gap-8 lg:grid lg:grid-cols-2 lg:gap-10"
     >
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-y-6 justify-center h-full"
+        className="flex flex-col justify-center order-1 w-full gap-y-4 md:gap-y-6 lg:order-none"
       >
-        <h1 className="text-4xl font-bold">Menu Details</h1>
-        <p className="text-muted-foreground mb-4">
+        <h1 className="text-2xl font-bold md:text-4xl">Menu Details</h1>
+        <p className="mb-4 text-muted-foreground">
           Upload logo, pick colors, and create your menu
         </p>
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col gap-2">
+
+        {/* Logo Upload & Color Pickers */}
+        <div className="flex flex-col gap-y-4 lg:flex-row lg:items-start lg:gap-x-6">
+          {/* Logo Upload */}
+          <div className="flex flex-col flex-1 gap-2">
             <label className="text-sm font-medium text-primary">
               Upload Logo
             </label>
-
-            <div className="relative border-2 border-dashed border-muted-foreground/30 rounded-lg p-4 flex items-center justify-center hover:border-primary transition cursor-pointer bg-muted">
+            <div className="relative flex items-center justify-center p-4 transition border-2 border-dashed rounded-lg cursor-pointer border-muted-foreground/30 hover:border-primary bg-muted">
               <input
                 title="logo upload"
                 id="logo-upload"
@@ -204,39 +206,45 @@ export default function LogoAndDetailsStep({
                 {logoFile?.name || "Click to upload or drag an image here"}
               </div>
             </div>
-
             {logoError && <p className="text-sm text-red-500">{logoError}</p>}
           </div>
 
-          <div className="flex flex-col gap-y-4">
-            <div className="flex items-center gap-x-4">
-              <label className="text-sm font-medium ">Primary Color</label>
+          {/* Color Pickers */}
+          <div className="flex flex-col flex-1 gap-y-4">
+            <div className="flex items-center justify-between gap-x-4">
+              <label className="text-xs font-medium sm:text-sm md:w-1/2">
+                Primary Color
+              </label>
               <Input
                 type="color"
                 className="w-16"
                 {...register("primaryColor")}
               />
-              {errors.primaryColor && (
-                <p className="text-sm text-red-500">
-                  {errors.primaryColor.message}
-                </p>
-              )}
             </div>
-            <div className="flex items-center gap-x-4">
-              <label className="text-sm font-medium w-1/2">Accent Color</label>
+            {errors.primaryColor && (
+              <p className="text-sm text-red-500">
+                {errors.primaryColor.message}
+              </p>
+            )}
+
+            <div className="flex items-center justify-between gap-x-4">
+              <label className="text-xs font-medium sm:text-sm md:w-1/2">
+                Accent Color
+              </label>
               <Input
                 type="color"
                 className="w-16"
                 {...register("accentColor")}
               />
-              {errors.accentColor && (
-                <p className="text-sm text-red-500">
-                  {errors.accentColor.message}
-                </p>
-              )}
             </div>
+            {errors.accentColor && (
+              <p className="text-sm text-red-500">
+                {errors.accentColor.message}
+              </p>
+            )}
           </div>
         </div>
+
         <div>
           <label className="text-sm font-medium">Menu Name</label>
           <Input {...register("menuName")} placeholder="e.g. Cafe Delight" />
@@ -245,32 +253,43 @@ export default function LogoAndDetailsStep({
           )}
         </div>
 
-        <div>
+        <div className="flex flex-col gap-y-4">
           <label className="text-sm font-medium">Add Category</label>
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row">
             <Input
               value={newCategoryName}
               onChange={(e) => setNewCategoryName(e.target.value)}
               placeholder="e.g. Beverages"
+              className="h-full"
             />
-            <Button type="button" onClick={handleAddCategory}>
+            <Button
+              type="button"
+              onClick={handleAddCategory}
+              className="w-full sm:w-auto"
+            >
               Add
             </Button>
           </div>
           {errors.categories && (
-            <p className="text-sm text-red-500 mt-1">
+            <p className="mt-1 text-sm text-red-500">
               {errors.categories.message}
             </p>
           )}
         </div>
 
-        <Button type="submit" disabled={isUploading} className="self-end mt-4">
+        {/* Submit Button */}
+        <Button
+          type="submit"
+          disabled={isUploading}
+          className="self-end w-full mt-4 sm:w-auto"
+        >
           {isUploading ? "Saving..." : "Continue to Preview"}
         </Button>
       </form>
 
       <ScrollArea
-        className={`border rounded-lg p-6 flex flex-col overflow-y-auto max-h-full transition-colors`}
+        className={`border rounded-lg w-full p-4 md:p-6 flex flex-col overflow-y-auto 
+                min-h-[40vh] max-h-[60vh] sm:min-h-[50vh] sm:max-h-[80vh] transition-colors`}
         style={{ backgroundColor: primaryColor }}
       >
         <div className={`${isDark ? "text-white" : "text-black"}`}>
@@ -281,7 +300,7 @@ export default function LogoAndDetailsStep({
                 alt="Logo preview"
                 width={100}
                 height={100}
-                className="rounded object-contain max-h-24"
+                className="object-contain rounded max-h-24"
               />
             </div>
           ) : (
@@ -293,11 +312,11 @@ export default function LogoAndDetailsStep({
               Logo preview will appear here
             </p>
           )}
-          <h2 className="text-xl font-bold text-center mb-4">
+          <h2 className="mb-4 text-xl font-bold text-center">
             {watchedName || "Menu Name"}
           </h2>
 
-          <div className="pr-2 min-h-[325px]">
+          <div className="pr-2">
             {categories.map((cat, catIndex) => (
               <div key={cat.id} className="mb-4">
                 <div
@@ -309,6 +328,7 @@ export default function LogoAndDetailsStep({
                   <Button
                     variant="ghost"
                     size="icon"
+                    type="button"
                     className={isDark ? "text-white" : "text-black"}
                     onClick={() => remove(catIndex)}
                   >
@@ -336,6 +356,7 @@ export default function LogoAndDetailsStep({
                     <Button
                       size="icon"
                       variant="ghost"
+                      type="button"
                       className="text-red-500"
                       onClick={() => handleRemoveItem(catIndex, itemIndex)}
                     >
@@ -345,9 +366,9 @@ export default function LogoAndDetailsStep({
                 ))}
 
                 <Button
+                  type="button"
                   variant={isDark ? "secondary" : "outline"}
                   size="sm"
-                  className={`mt-2 `}
                   onClick={() => handleAddItem(catIndex)}
                 >
                   <Plus size={16} /> Add Item

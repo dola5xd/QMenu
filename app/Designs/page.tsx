@@ -22,7 +22,7 @@ export default async function Page() {
   }
 
   return (
-    <section className="px-10 py-2">
+    <section className="px-4 md:px-5 lg:px-10 py-2">
       <header className="flex items-center justify-between md:pr-10">
         <h2 className="text-xl font-semibold">Your Menus</h2>
         <CreateMenuDialog />

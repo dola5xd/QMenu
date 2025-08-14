@@ -39,17 +39,17 @@ export function NavUser({
               {user.name?.slice(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div className="grid flex-1 text-left text-sm leading-tight">
+          <div className="hidden md:grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-medium">{user.name}</span>
             <span className="truncate text-xs">{user.email}</span>
           </div>
-          <BsThreeDotsVertical className="ml-auto size-4" />
+          <BsThreeDotsVertical className="hidden md:block ml-auto size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg text-primary data-[state=open]:bg-background"
         side={"bottom"}
-        align="end"
+        align={"end"}
         sideOffset={4}
       >
         <DropdownMenuLabel className="p-0 font-normal">

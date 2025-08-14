@@ -161,11 +161,11 @@ export default function AccountForm({ user }: { user: DBUser }) {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="space-y-6 w-full h-full flex flex-col justify-between rounded-xl shadow-lg ring-1 ring-border px-6 py-10"
+      className="flex flex-col justify-between w-full h-full px-3 py-5 space-y-3 shadow-lg md:space-y-8 rounded-xl ring-1 ring-border md:px-6 lg:py-10"
       autoComplete="off"
     >
-      <section className="flex flex-1 gap-8 w-full">
-        <div className="w-1/2 flex flex-col gap-6">
+      <section className="flex flex-col flex-1 w-full gap-4 md:flex-row md:gap-8">
+        <div className="flex flex-col gap-3 md:w-1/2 md:gap-6">
           <div className="flex flex-col gap-y-2">
             <label className="block text-sm font-medium">Name</label>
             <Input {...register("name")} placeholder="Your name" />
@@ -180,13 +180,12 @@ export default function AccountForm({ user }: { user: DBUser }) {
               type="email"
               disabled
               readOnly
-              className="bg-muted cursor-not-allowed"
+              className="cursor-not-allowed bg-muted"
               defaultValue={user.email}
             />
           </div>
 
           <div className="flex flex-col gap-y-4">
-            {/* Current Password */}
             <div className="flex flex-col gap-y-2">
               <label className="block text-sm font-medium">
                 Current Password
@@ -201,10 +200,11 @@ export default function AccountForm({ user }: { user: DBUser }) {
                   className="pr-10"
                 />
                 <Button
+                  type="button"
                   size={"icon"}
                   variant={"link"}
                   onClick={() => setShowCurrent((prev) => !prev)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
+                  className="absolute -translate-y-1/2 right-2 top-1/2 text-muted-foreground"
                 >
                   {showCurrent ? (
                     <EyeOffIcon className="w-4 h-4" />
@@ -232,9 +232,10 @@ export default function AccountForm({ user }: { user: DBUser }) {
                 />
                 <Button
                   size={"icon"}
+                  type="button"
                   variant={"link"}
                   onClick={() => setShowNew((prev) => !prev)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
+                  className="absolute -translate-y-1/2 right-2 top-1/2 text-muted-foreground"
                 >
                   {showNew ? (
                     <EyeOffIcon className="w-4 h-4" />
@@ -250,7 +251,6 @@ export default function AccountForm({ user }: { user: DBUser }) {
               )}
             </div>
 
-            {/* Confirm New Password */}
             <div className="flex flex-col gap-y-2">
               <label className="block text-sm font-medium">
                 Confirm New Password
@@ -266,8 +266,9 @@ export default function AccountForm({ user }: { user: DBUser }) {
                 <Button
                   size={"icon"}
                   variant={"link"}
+                  type="button"
                   onClick={() => setShowConfirm((prev) => !prev)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
+                  className="absolute -translate-y-1/2 right-2 top-1/2 text-muted-foreground"
                 >
                   {showConfirm ? (
                     <EyeOffIcon className="w-4 h-4" />
@@ -285,10 +286,10 @@ export default function AccountForm({ user }: { user: DBUser }) {
           </div>
         </div>
 
-        <div className="w-1/2 flex flex-col gap-4">
+        <div className="flex flex-col gap-4 md:w-1/2">
           <label className="text-sm font-medium">Profile Image</label>
           <label
-            className="relative border-2 border-dashed border-muted-foreground/30 rounded-lg p-4 flex items-center justify-center hover:border-primary transition cursor-pointer bg-muted h-[240px]"
+            className="relative border-2 border-dashed border-muted-foreground/30 rounded-lg p-4 flex items-center justify-center hover:border-primary transition cursor-pointer bg-muted h-[240px] md:h-full"
             htmlFor="logo-upload"
           >
             <Input
@@ -303,9 +304,9 @@ export default function AccountForm({ user }: { user: DBUser }) {
               <Image
                 src={logoPreview}
                 alt="Profile"
-                width={100}
-                height={100}
-                className="rounded object-contain pointer-events-none"
+                width={200}
+                height={200}
+                className="object-contain rounded-lg pointer-events-none"
               />
             ) : (
               <div className="text-sm text-muted-foreground">
@@ -329,7 +330,11 @@ export default function AccountForm({ user }: { user: DBUser }) {
       </section>
 
       <div>
-        <Button type="submit" className="cursor-pointer" disabled={isUploading}>
+        <Button
+          type="submit"
+          className="w-full cursor-pointer md:w-auto"
+          disabled={isUploading}
+        >
           {isUploading ? "Saving..." : "Update Account"}
         </Button>
       </div>

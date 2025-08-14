@@ -62,13 +62,13 @@ export default function MenuClient({ menu, isOwner }: Props) {
       {showAdminSettings && (
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col items-start justify-between w-full gap-3 px-4 text-sm transition-all duration-500 border-b py-7 bg-black/10 backdrop-blur-sm border-white/20 sm:flex-row sm:flex-wrap sm:items-center"
+          className="flex flex-col items-start justify-between w-full gap-3 px-10 text-sm transition-all duration-500 border-b sm:px-4 py-7 bg-black/10 backdrop-blur-sm border-white/20 sm:flex-row sm:flex-wrap sm:items-center"
         >
           <Button
             size={"icon"}
             variant={"secondary"}
             onClick={() => setAdminSettings((pre) => !pre)}
-            className="absolute right-6 top-3"
+            className="absolute sm:hidden right-6 top-3"
           >
             <EyeClosed />
           </Button>
@@ -99,18 +99,27 @@ export default function MenuClient({ menu, isOwner }: Props) {
               {isPending ? "Saving..." : "Confirm"}
             </Button>
           </div>
-
-          <Link
-            href={`/menus/create?id=${menu.id}&step=1`}
-            className="w-full sm:w-auto"
-          >
-            <Button
-              variant="destructive"
-              className="justify-center w-full sm:w-auto"
+          <div className="flex items-center gap-x-4 ">
+            <Link
+              href={`/menus/create?id=${menu.id}&step=1`}
+              className="w-full sm:w-auto"
             >
-              <PenBoxIcon className="w-4 h-4 mr-1" /> Edit Menu
+              <Button
+                variant="destructive"
+                className="justify-center w-full sm:w-auto"
+              >
+                <PenBoxIcon className="w-4 h-4 mr-1" /> Edit Menu
+              </Button>
+            </Link>
+            <Button
+              size={"icon"}
+              variant={"secondary"}
+              onClick={() => setAdminSettings((pre) => !pre)}
+              className="hidden sm:flex"
+            >
+              <EyeClosed />
             </Button>
-          </Link>
+          </div>
         </form>
       )}
       {isOwner && !showAdminSettings && (

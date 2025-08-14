@@ -52,8 +52,8 @@ export default function FiltersBar({ menus }: Props) {
   return (
     <>
       <section className="flex flex-wrap items-center justify-between gap-4 px-2 py-4 sm:px-4 md:px-8">
-        <div className="flex items-center gap-6 md:flex-wrap">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col items-center w-full gap-6 md:flex-row md:flex-wrap">
+          <div className="flex items-center justify-between w-full gap-2 md:w-auto md:justify-normal">
             <label
               htmlFor="visibility"
               className="text-sm font-medium text-primary"
@@ -66,7 +66,7 @@ export default function FiltersBar({ menus }: Props) {
                 setVisibility(val === "all" ? undefined : val)
               }
             >
-              <SelectTrigger className="w-[160px] border text-primary">
+              <SelectTrigger className="min-w-[160px] lg:w-[160px] border text-primary">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent className="bg-background">
@@ -77,12 +77,12 @@ export default function FiltersBar({ menus }: Props) {
             </Select>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between w-full gap-2 md:justify-normal md:w-auto">
             <label htmlFor="sort" className="text-sm font-medium text-primary">
               Sort
             </label>
             <Select onValueChange={(val) => setSort(val)}>
-              <SelectTrigger className="w-[160px] border text-primary">
+              <SelectTrigger className="min-w-[160px] lg:w-[160px] border text-primary">
                 <SelectValue placeholder="By Date/Name" />
               </SelectTrigger>
               <SelectContent className="bg-background">
@@ -99,12 +99,12 @@ export default function FiltersBar({ menus }: Props) {
       <section
         className={`min-h-[200px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6`}
       >
-        {filteredMenus.length === 0 ? (
+        {filteredMenus.length !== 0 ? (
+          filteredMenus.map((menu) => <MenuItem menu={menu} key={menu.id} />)
+        ) : (
           <p className="py-10 text-lg text-center col-span-full text-muted-foreground">
             No menus found.
           </p>
-        ) : (
-          filteredMenus.map((menu) => <MenuItem menu={menu} key={menu.id} />)
         )}
       </section>
     </>

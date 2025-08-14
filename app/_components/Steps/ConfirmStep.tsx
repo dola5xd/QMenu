@@ -115,9 +115,11 @@ export default function ConfirmStep({
       transition={{ duration: 0.3 }}
       className="flex flex-col h-full gap-y-4"
     >
-      <h1 className="text-3xl font-bold">Step 3: Review & Publish</h1>
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 h-full">
-        <div className="flex flex-col items-center justify-center gap-6 p-6 bg-white/25 border shadow-md rounded-xl max-h-[600px]">
+      <h1 className="text-2xl font-bold sm:text-3xl">
+        Step 3: Review & Publish
+      </h1>
+      <div className="flex flex-col w-full h-full gap-8 lg:grid lg:grid-cols-2 lg:gap-10">
+        <div className="flex flex-col items-center justify-center gap-6 p-3 md:p-6 bg-white/25 border shadow-md rounded-xl max-h-[600px]">
           <div
             ref={qrRef}
             className="flex flex-col items-center w-full max-w-xs p-4 space-y-4 border shadow-md rounded-xl"
@@ -146,8 +148,8 @@ export default function ConfirmStep({
             </p>
           </div>
 
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-x-2">
+          <div className="flex flex-col items-center justify-between w-full gap-y-4 md:flex-row">
+            <div className="flex items-center w-full gap-x-2">
               <label className="block text-sm font-medium text-primary">
                 Visibility
               </label>
@@ -157,7 +159,7 @@ export default function ConfirmStep({
                   setStatus(value)
                 }
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full md:w-auto">
                   <SelectValue placeholder="Select visibility" />
                 </SelectTrigger>
                 <SelectContent>
@@ -166,38 +168,41 @@ export default function ConfirmStep({
                 </SelectContent>
               </Select>
             </div>
-            <Button onClick={handleDownloadPDF}>
+            <Button onClick={handleDownloadPDF} className="w-full md:w-auto">
               <DownloadIcon className="w-4 h-4 mr-2" /> Download as PDF
             </Button>
           </div>
 
-          <div className="flex items-center justify-between w-full">
-            <label className="block text-sm font-medium text-primary">
-              Shareable Link
-            </label>
-            <div className="flex gap-2">
+          <div className="flex flex-col items-center justify-between w-full gap-y-4 sm:flex-row">
+            <div className="flex items-center justify-between w-full gap-2 sm:w-auto">
+              <label className="block text-sm font-medium text-primary">
+                Shareable Link
+              </label>
               <Button variant="outline" type="button" onClick={handleCopy}>
                 <CopyIcon size={16} className="mr-1" /> Copy
               </Button>
-              <Button
-                variant="secondary"
-                type="button"
-                onClick={() => window.open(publicLink, "_blank")}
-              >
-                <EyeIcon size={16} className="mr-1" /> Preview
-              </Button>
             </div>
+
+            <Button
+              variant="secondary"
+              type="button"
+              className="w-full sm:w-auto"
+              onClick={() => window.open(publicLink, "_blank")}
+            >
+              <EyeIcon size={16} className="mr-1" /> Preview
+            </Button>
           </div>
         </div>
 
         <ScrollArea
-          className="rounded-xl shadow-lg border max-h-[500px]"
+          className="border rounded-lg w-full p-4 md:p-6 lg:p-2 xl:p-6 flex flex-col overflow-y-auto 
+                min-h-[40vh] max-h-[500px] transition-color"
           style={{
             backgroundColor: menu?.primaryColor || "#ffffff",
             color: readableTextColor,
           }}
         >
-          <div className="relative flex flex-col rounded-t-xl gap-y-4">
+          <div className="relative flex flex-col mb-6 rounded-t-xl gap-y-4">
             <div className="flex flex-col w-full py-4 gap-y-8" />
             {menu?.logo && (
               <div className="flex justify-center">
