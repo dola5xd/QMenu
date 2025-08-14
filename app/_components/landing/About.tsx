@@ -28,20 +28,21 @@ function About() {
   return (
     <section
       id="about"
-      className="relative min-h-screen px-6 pt-40 pb-20 overflow-hidden text-secondary bg-primary sm:px-12 md:px-20 "
+      className="relative min-h-screen px-6 pt-[120px] sm:pt-[180px] md:pt-[220px] lg:pt-[250px] xl:pt-[320px] pb-20 overflow-hidden text-secondary bg-primary sm:px-12 md:px-20"
     >
-      <Waves className="inset-0" />
-      <div className="flex flex-col text-center gap-y-4">
+      <Waves className="top-0 left-0 " />
+
+      <div className="flex flex-col text-center gap-y-4 xl:mt-4">
         <div className="flex flex-col items-center justify-center text-center gap-y-6">
           <SectionHeader>About Us</SectionHeader>
-          <p className="max-w-3xl">
+          <p className="max-w-sm text-xs sm:text-base sm:max-w-3xl">
             QMenu is a smart digital tool that helps café and restaurant owners
-            create beautifully branded menus and share them through QR codes —
-            in just minutes. No tech skills required!
+            create beautifully branded menus and share them through QR codes in
+            just minutes. No tech skills required!
           </p>
         </div>
 
-        <div className="grid gap-8 mt-10 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 mt-10 lg:grid-cols-3">
           {features.map((feature, i) => (
             <div
               key={i}
@@ -50,8 +51,12 @@ function About() {
               <span className="relative h-[250px] aspect-square">
                 <Image src={feature.image} alt={feature.title} fill />
               </span>
-              <h3 className="text-2xl font-bold text-white">{feature.title}</h3>
-              <p className="max-w-sm">{feature.description}</p>
+              <h3 className="text-lg font-bold text-white sm:text-2xl">
+                {feature.title}
+              </h3>
+              <p className="max-w-lg text-xs sm:text-base sm:max-w-sm">
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>

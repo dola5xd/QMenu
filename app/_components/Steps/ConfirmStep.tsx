@@ -153,7 +153,7 @@ export default function ConfirmStep({
               </label>
               <Select
                 value={status}
-                onValueChange={(value: "public" | "private" | "archived") =>
+                onValueChange={(value: "public" | "private") =>
                   setStatus(value)
                 }
               >
@@ -163,7 +163,6 @@ export default function ConfirmStep({
                 <SelectContent>
                   <SelectItem value="public">Public</SelectItem>
                   <SelectItem value="private">Private</SelectItem>
-                  <SelectItem value="archived">Archived</SelectItem>
                 </SelectContent>
               </Select>
             </div>

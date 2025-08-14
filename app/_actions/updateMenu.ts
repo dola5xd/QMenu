@@ -4,7 +4,7 @@ import { db } from "@/_lib/firebase-admin";
 
 export async function updateMenuVisibility(
   id: string,
-  status: "public" | "private" | "archived"
+  status: "public" | "private"
 ) {
   try {
     await db.collection("menus").doc(id).update({ status });

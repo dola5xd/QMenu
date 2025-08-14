@@ -17,12 +17,13 @@ export default async function Page() {
       menus = result.data;
     } else {
       console.error("Error fetching menus:", result.error);
+      throw new Error(result.error);
     }
   }
 
   return (
     <section className="px-10 py-2">
-      <header className="flex items-center justify-between pr-10">
+      <header className="flex items-center justify-between md:pr-10">
         <h2 className="text-xl font-semibold">Your Menus</h2>
         <CreateMenuDialog />
       </header>

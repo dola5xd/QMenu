@@ -18,7 +18,7 @@ export type MenuData = {
   logo: string | null;
   primaryColor: string;
   accentColor: string;
-  status?: "public" | "private" | "archived";
+  status?: "public" | "private";
   userId: string;
   createdAt?: number;
   updatedAt?: number;
@@ -38,7 +38,7 @@ export async function createMenu(data: MenuData) {
       createdAt: new Date(),
       name: data.name || null,
       categories: data.categories || null,
-      status: data.status || "archived",
+      status: data.status || "private",
     });
 
     return { success: true };

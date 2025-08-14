@@ -4,12 +4,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-import Button from "../_components/ui/Landing/Button";
 import Logo from "../_components/ui/Logo";
 import Squares from "../_components/ui/Squares";
 import { BsGoogle } from "react-icons/bs";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/_components/ui/button";
+import { Input } from "@/_components/ui/input";
 
 const schema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -67,75 +68,80 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="flex items-center justify-center h-screen px-6 py-20 text-secondary bg-dark">
+    <main className="flex items-center justify-center px-6 py-20 h-dvh text-secondary bg-dark">
       <div className="absolute w-full h-full">
-        {/* Squares background layer */}
         <Squares
           speed={0.25}
           squareSize={50}
           direction="diagonal"
-          borderColor="#d7ccc837" // already transparent
-          hoverFillColor="#1c1c1c"
+          borderColor="#d7ccc81e"
+          hoverFillColor="#222222"
         />
 
-        {/* Gradient overlay layer to soften it */}
         <div className="absolute inset-0 bg-gradient-to-br to-transparent via-dark/80 from-dark" />
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="z-0 flex flex-col w-full max-w-md p-10 shadow-xl gap-y-4 bg-dark/95 rounded-xl"
+        className="z-0 flex flex-col w-full max-w-md p-5 text-sm shadow-xl xl:p-10 gap-y-3 xl:gap-y-4 bg-dark/95 rounded-xl xl:text-base"
       >
-        <div className="flex justify-center mb-6">
-          <Logo variants="light" />
+        <div className="flex justify-center mb-3 xl:mb-6">
+          <Logo variants="light" className="w-auto h-20 aspect-[9/8]" />
         </div>
 
-        <h1 className="text-2xl font-bold text-center">Create your account</h1>
+        <h1 className="text-xl font-bold text-center xl:text-2xl">
+          Create your account
+        </h1>
 
         <div>
-          <label className="block text-sm font-medium">Name</label>
-          <input
+          <label className="block text-xs font-medium xl:text-sm">Name</label>
+          <Input
             {...register("name")}
             autoComplete="name"
             placeholder="Adel Yasser"
-            className="w-full px-4 py-2 mt-1 border rounded-md border-secondary focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full mt-1"
           />
           {errors.name && (
-            <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
+            <p className="mt-1 text-xs text-red-500 xl:text-sm">
+              {errors.name.message}
+            </p>
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium">Email</label>
-          <input
+          <label className="block text-xs font-medium xl:text-sm">Email</label>
+          <Input
             {...register("email")}
             type="email"
             autoComplete="email"
             placeholder="example@gmail.com"
-            className="w-full px-4 py-2 mt-1 border rounded-md border-secondary focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full mt-1"
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+            <p className="mt-1 text-xs text-red-500 xl:text-sm">
+              {errors.email.message}
+            </p>
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium">Password</label>
-          <input
+          <label className="block text-xs font-medium xl:text-sm">
+            Password
+          </label>
+          <Input
             {...register("password")}
             type="password"
             autoComplete="new-password"
             placeholder="********"
-            className="w-full px-4 py-2 mt-1 border rounded-md border-secondary focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full mt-1"
           />
           {errors.password && (
-            <p className="mt-1 text-sm text-red-500">
+            <p className="mt-1 text-xs text-red-500 xl:text-sm">
               {errors.password.message}
             </p>
           )}
         </div>
 
         <Button
-          variants="custom"
           className="w-full text-white bg-accent hover:bg-accent/75"
           type="submit"
           disabled={isSubmitting}
@@ -143,21 +149,20 @@ export default function RegisterPage() {
           {isSubmitting ? "Registering..." : "Register"}
         </Button>
 
-        <div className="relative flex items-center justify-center my-2 text-xs text-secondary/50">
+        <div className="relative flex items-center justify-center text-xs xl:my-2 text-secondary/50">
           <span className="absolute left-0 w-full border-t border-secondary/30" />
           <span className="z-10 px-4 bg-dark">OR</span>
         </div>
 
         <Button
           type="button"
-          variants="custom"
           onClick={handleGoogleRegister}
-          className="flex items-center justify-center w-full gap-3 transition border border-secondary hover:bg-secondary/10 text-secondary"
+          className="flex items-center justify-center w-full gap-3 transition hover:bg-secondary/10 text-secondary"
         >
           <BsGoogle /> <span>Register with Google</span>
         </Button>
 
-        <p className="text-sm text-center text-secondary/75">
+        <p className="text-xs text-center xl:text-sm text-secondary/75">
           Already have an account?{" "}
           <a href="/login" className="text-secondary hover:underline">
             Sign In

@@ -4,7 +4,7 @@ import { db } from "@/_lib/firebase-admin";
 
 export async function publishMenu(
   id: string,
-  status: "public" | "private" | "archived",
+  status: "public" | "private",
   pdfUrl?: string
 ) {
   try {

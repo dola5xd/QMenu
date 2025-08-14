@@ -14,8 +14,8 @@ export default async function Page() {
   if (!user) redirect("/login");
 
   return (
-    <main className="font-cairo px-6 md:px-20 py-10 w-screen bg-background min-h-screen">
-      <div className="max-w-6xl mx-auto space-y-8 my-auto h-full">
+    <main className="w-screen min-h-screen px-6 py-10 font-cairo md:px-20 bg-background">
+      <div className="h-full max-w-6xl mx-auto my-auto space-y-8">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold text-foreground">
@@ -33,4 +33,3 @@ export default async function Page() {
     </main>
   );
 }
-//

@@ -16,6 +16,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Plus, Trash2Icon } from "lucide-react";
 import { uploadToCloudinary } from "@/_lib/Cloudinary";
 import { createMenu, MenuData } from "@/_actions/createMenu";
+import { v4 as uuidv4 } from "uuid";
 
 const itemSchema = z.object({
   name: z.string().min(1, "Item name is required"),
@@ -104,7 +105,7 @@ export default function LogoAndDetailsStep({
       return;
     }
     append({
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       name: newCategoryName.trim(),
       items: [{ name: "", price: "" }],
     });

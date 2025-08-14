@@ -1,9 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 
-function Logo({ variants = "dark" }: { variants?: "dark" | "light" }) {
+function Logo({
+  variants = "dark",
+  className = "",
+}: {
+  variants?: "dark" | "light";
+  className?: string;
+}) {
   return (
-    <Link href={"/"} className="relative h-20 aspect-[9/8]">
+    <Link
+      href={"/"}
+      className={`relative h-10 w-10 sm:w-auto sm:h-20 sm:aspect-[9/8] ${className}`}
+    >
       <Image
         src={
           variants === "dark"

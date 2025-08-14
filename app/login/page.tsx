@@ -2,13 +2,14 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Button from "../_components/ui/Landing/Button";
 import Logo from "../_components/ui/Logo";
 import Squares from "../_components/ui/Squares";
 import { BsGoogle } from "react-icons/bs";
 import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
 import { redirect } from "next/navigation";
+import { Button } from "@/_components/ui/button";
+import { Input } from "@/_components/ui/input";
 
 const schema = z.object({
   email: z.string().email(),
@@ -55,64 +56,66 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="flex items-center justify-center h-screen px-6 py-20 text-secondary bg-dark">
+    <main className="flex items-center justify-center px-6 py-20 h-dvh text-secondary bg-dark">
       <div className="absolute w-full h-full">
-        {/* Squares background layer */}
         <Squares
           speed={0.25}
           squareSize={50}
           direction="diagonal"
-          borderColor="#d7ccc837" // already transparent
-          hoverFillColor="#1c1c1c"
+          borderColor="#d7ccc81e"
+          hoverFillColor="#222222"
         />
 
-        {/* Gradient overlay layer to soften it */}
         <div className="absolute inset-0 bg-gradient-to-br to-transparent via-dark/80 from-dark" />
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="z-0 w-full max-w-md p-10 space-y-6 shadow-xl bg-dark/95 rounded-xl"
+        className="z-0 w-full max-w-md p-5 space-y-6 shadow-xl sm:p-10 bg-dark/95 rounded-xl"
       >
-        <div className="flex justify-center mb-6">
-          <Logo variants="light" />
+        <div className="flex justify-center mb-3 lg:mb-6">
+          <Logo variants="light" className="w-auto h-20 aspect-[9/8]" />
         </div>
 
-        <h1 className="text-2xl font-bold text-center">
+        <h1 className="text-xl font-bold text-center sm:text-2xl">
           Sign in to your account
         </h1>
 
         <div>
-          <label className="block text-sm font-medium">Email</label>
-          <input
+          <label className="block text-xs font-medium sm:text-sm">Email</label>
+          <Input
             {...register("email")}
             type="email"
             autoComplete="email"
             placeholder="example@gmail.com"
-            className="w-full px-4 py-2 mt-1 border rounded-md border-secondary focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full mt-1"
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+            <p className="mt-1 text-xs text-red-500 sm:text-sm">
+              {errors.email.message}
+            </p>
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium">Password</label>
-          <input
+          <label className="block text-xs font-medium sm:text-sm">
+            Password
+          </label>
+          <Input
             {...register("password")}
             type="password"
             autoComplete="new-password"
             placeholder="********"
-            className="w-full px-4 py-2 mt-1 border rounded-md border-secondary focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full mt-1"
           />
           {errors.password && (
-            <p className="mt-1 text-sm text-red-500">
+            <p className="mt-1 text-xs text-red-500 sm:text-sm">
               {errors.password.message}
             </p>
           )}
         </div>
-        <div>
+
+        <div className="flex flex-col gap-y-2 sm:gap-y-4">
           <Button
-            variants="custom"
             className="w-full text-white bg-accent hover:bg-accent/75"
             type="submit"
             disabled={isSubmitting}
@@ -127,14 +130,13 @@ export default function LoginPage() {
 
           <Button
             type="button"
-            variants="custom"
             onClick={handleGoogleLogin}
-            className="flex items-center justify-center w-full gap-3 transition border border-secondary hover:bg-secondary/10 text-secondary"
+            className="flex items-center justify-center w-full gap-3 transition hover:bg-secondary/10 text-secondary"
           >
             <BsGoogle /> <span>Sign in with Google</span>
           </Button>
         </div>
-        <p className="text-sm text-center text-secondary/75">
+        <p className="text-xs text-center sm:text-sm text-secondary/75">
           Don’t have an account?{" "}
           <a href="/register" className="text-secondary hover:underline">
             Register

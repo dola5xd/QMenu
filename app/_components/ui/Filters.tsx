@@ -52,7 +52,7 @@ export default function FiltersBar({ menus }: Props) {
   return (
     <>
       <section className="flex flex-wrap items-center justify-between gap-4 px-2 py-4 sm:px-4 md:px-8">
-        <div className="flex flex-wrap items-center gap-6">
+        <div className="flex items-center gap-6 md:flex-wrap">
           <div className="flex items-center gap-2">
             <label
               htmlFor="visibility"
@@ -73,7 +73,6 @@ export default function FiltersBar({ menus }: Props) {
                 <SelectItem value="all">All</SelectItem>
                 <SelectItem value="public">Public</SelectItem>
                 <SelectItem value="private">Private</SelectItem>
-                <SelectItem value="archived">Archived</SelectItem>
               </SelectContent>
             </Select>
           </div>
