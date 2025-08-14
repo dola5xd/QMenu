@@ -11,7 +11,7 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   const isAuthPage = pathname === "/login" || pathname === "/register";
-  const isProtectedDesigns = pathname.startsWith("/designs");
+  const isProtectedDesigns = pathname.startsWith("/Designs");
   const isProtectedMenu = pathname.startsWith("/menus");
   const isProtectedAccount = pathname.startsWith("/account");
 
@@ -20,7 +20,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // 🔒 2. If not logged in and accessing /designs → redirect to /login
+  // 🔒 2. If not logged in and accessing /Designs → redirect to /login
   if (!token && isProtectedDesigns) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
@@ -35,9 +35,9 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  // 🔁 5. If logged in and accessing login/register → redirect to /designs
+  // 🔁 5. If logged in and accessing login/register → redirect to /Designs
   if (token && isAuthPage) {
-    return NextResponse.redirect(new URL("/designs", req.url));
+    return NextResponse.redirect(new URL("/Designs", req.url));
   }
 
   // ✅ 6. Allow all other requests
@@ -50,7 +50,7 @@ export const config = {
     "/login",
     "/register",
     "/account",
-    "/designs/:path*",
+    "/Designs/:path*",
     "/menus/:path*",
   ],
 };

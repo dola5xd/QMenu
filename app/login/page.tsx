@@ -42,7 +42,7 @@ export default function LoginPage() {
 
       if (res?.ok) {
         toast.success("Logged in successfully!");
-        redirect("/designs");
+        redirect("/Designs");
       }
     } catch (err) {
       console.error("[Submit] Unexpected error:", err);
@@ -51,7 +51,7 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = async () => {
-    const res = await signIn("google", { callbackUrl: "/designs" });
+    const res = await signIn("google", { callbackUrl: "/Designs" });
     if (res?.ok) toast.success("Logged in sucessfully!");
   };
 

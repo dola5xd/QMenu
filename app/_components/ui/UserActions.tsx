@@ -29,7 +29,7 @@ function UserActions({ session }: { session: DBUser }) {
         <DropdownMenuSeparator />
 
         <DropdownMenuItem>
-          <Link href="/designs">My Designs</Link>
+          <Link href="/Designs">My Designs</Link>
         </DropdownMenuItem>
 
         <DropdownMenuItem

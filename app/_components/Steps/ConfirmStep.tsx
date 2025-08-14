@@ -72,7 +72,7 @@ export default function ConfirmStep({
       if (result.success) {
         toast.dismiss();
         toast.success("Menu published and QR uploaded!");
-        router.push("/designs");
+        router.push("/Designs");
       } else {
         toast.dismiss();
         toast.error("Failed to publish menu");

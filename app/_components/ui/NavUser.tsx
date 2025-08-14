@@ -69,7 +69,7 @@ export function NavUser({
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={() => router.push("/designs")}>
+        <DropdownMenuItem onSelect={() => router.push("/Designs")}>
           <MenuSquareIcon />
           Designs
         </DropdownMenuItem>
