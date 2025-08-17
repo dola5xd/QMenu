@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍽️ QMenu — Multilingual Café Menu Platform
 
-## Getting Started
+![QMenu Hero](https://socialify.git.ci/dola5xd/QMenu/image?language=1&logo=https%3A%2F%2Fq-menu-delta.vercel.app%2Fassets%2Flogo-cafe.svg&name=1&owner=1&stargazers=1&theme=Light)
 
-First, run the development server:
+> A modern multilingual café menu platform — QR-ready, customizable, and built for restaurants.
+
+---
+
+## 🌐 Live Demo
+
+- **Main Website:** [QMenu](https://q-menu-delta.vercel.app/)
+
+---
+
+## 🖼️ Screenshots
+
+#### 💻 Desktop Preview
+
+![Desktop Preview](/Screenshots/Desktop-preview.png)
+
+---
+
+## ⚙️ Tech Stack
+
+- **Framework:** Next.js 15 (App Router)
+- **Styling:** Tailwind CSS + ShadCN/UI + Radix UI
+- **Animations:** Framer Motion
+- **Forms:** React Hook Form + Zod Validation
+- **Auth:** NextAuth (Firebase Adapter)
+- **Database:** Firebase Firestore
+- **Storage:** Firebase + Cloudinary
+
+---
+
+## 📦 Installation
 
 ```bash
+# Clone project
+git clone https://github.com/your-username/qmenu.git
+cd qmenu
+
+# Install dependencies
+npm install
+
+# Start dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🧪 Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Example `.env`:
 
-## Learn More
+```env
+NEXTAUTH_SECRET=your_secret
+NEXTAUTH_URL=http://localhost:3000
+FIREBASE_API_KEY=your_api_key
+FIREBASE_PROJECT_ID=your_project_id
+CLOUDINARY_URL=your_cloudinary_url
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📁 Folder Highlights
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/
+├── [lang]/           # Multilingual pages (en, ar)
+├── components/       # Reusable UI components
+├── _providers/       # Global providers (Auth, Lang, Theme)
+├── _lib/             # Auth configs & helpers
+├── _utils/           # Utility functions
+└── page.tsx          # Home entry
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🤝 Contributing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+🚀 Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+
+---
+
+## 📄 License
+
+📜 This project is licensed under the **MIT License**.
+
+---
+
+💖 Made with passion by **Adel Yasser**

@@ -2,6 +2,35 @@ import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+// Arabic-speaking countries
+const arabicCountries = [
+  "EG",
+  "SA",
+  "AE",
+  "DZ",
+  "MA",
+  "LY",
+  "SD",
+  "KW",
+  "QA",
+  "OM",
+  "BH",
+  "YE",
+  "IQ",
+  "SY",
+  "JO",
+  "LB",
+  "PS",
+  "MR",
+  "SO",
+];
+
+// Detect language
+function detectLang(country: string | undefined): "ar" | "en" {
+  if (!country) return "en";
+  return arabicCountries.includes(country) ? "ar" : "en";
+}
+
 export async function middleware(req: NextRequest) {
   const token = await getToken({
     req,
@@ -15,9 +44,16 @@ export async function middleware(req: NextRequest) {
   const isProtectedMenu = pathname.startsWith("/menus");
   const isProtectedAccount = pathname.startsWith("/account");
 
-  // ✅ 1. Always allow homepage
+  // ✅ 1. Language detection only for homepage `/`
   if (pathname === "/") {
-    return NextResponse.next();
+    const country =
+      req.headers.get("x-vercel-ip-country") ||
+      req.headers.get("x-country-code") ||
+      "US";
+    const lang = detectLang(country);
+    const url = req.nextUrl.clone();
+    url.pathname = `/${lang}`;
+    return NextResponse.redirect(url);
   }
 
   // 🔒 2. If not logged in and accessing /Designs → redirect to /login

@@ -16,6 +16,8 @@ import {
   type TargetAndTransition,
 } from "framer-motion";
 
+const isRTL = (text: string) => /[\u0600-\u06FF]/.test(text);
+
 function cn(...classes: (string | undefined | null | boolean)[]): string {
   return classes.filter(Boolean).join(" ");
 }
@@ -90,6 +92,11 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
 
     const elements = useMemo(() => {
       const currentText: string = texts[currentTextIndex];
+
+      if (isRTL(currentText)) {
+        return [{ characters: [currentText], needsSpace: false }];
+      }
+
       if (splitBy === "characters") {
         const words = currentText.split(" ");
         return words.map((word, i) => ({
@@ -199,6 +206,7 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
       const intervalId = setInterval(next, rotationInterval);
       return () => clearInterval(intervalId);
     }, [next, rotationInterval, auto]);
+    const currentText = texts[currentTextIndex];
 
     return (
       <motion.span
@@ -239,6 +247,7 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
                       key={charIndex}
                       initial={initial}
                       animate={animate}
+                      dir={isRTL(currentText) ? "rtl" : "ltr"} // ✅ Arabic flows RTL
                       exit={exit}
                       transition={{
                         ...transition,

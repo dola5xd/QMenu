@@ -6,48 +6,67 @@ import { getUserByID } from "@/_utils/api";
 import UserActions from "../ui/UserActions";
 import { Button } from "../ui/button";
 
-async function Header() {
+type HeaderProps = {
+  lang: "en" | "ar";
+  headerText: {
+    nav: string[];
+    buttons: {
+      create: string;
+      contact: string;
+    };
+  };
+};
+
+async function Header({ lang = "en", headerText }: HeaderProps) {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id || "";
-
   const user: DBUser | null = await getUserByID(userId);
+
+  const switchTo = lang === "ar" ? "en" : "ar";
 
   return (
     <header className="flex flex-col items-center justify-between px-10 py-4 gap-y-4 lg:flex-row lg:px-20">
-      <nav className="flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-y-4 w-full lg:w-2/3 lg:*:w-1/2">
-        <div className="w-full lg:w-1/2 flex items-center justify-center gap-x-4">
+      <nav className="flex flex-col items-center justify-center w-full lg:flex-row lg:justify-between gap-y-4 lg:w-2/3 ">
+        <div className="flex items-center justify-center w-full lg:w-10 lg:max-w-1/4 gap-x-4">
           <Logo />
-          <span className="lg:hidden h-full mt-auto">
+          <span className="h-full mt-auto lg:hidden">
             {user ? (
               <UserActions session={user} />
             ) : (
               <Link href={"/login"}>
-                <Button variant="outline">Create Your First Menu</Button>
+                <Button variant="outline">{headerText.buttons.create}</Button>
               </Link>
             )}
           </span>
         </div>
-        <ul className="justify-center flex items-center gap-x-4 *:relative *:text-sm md:*:text-lg *:font-semibold *:cursor-pointer *:before:content-['']  *:before:absolute *:before:-bottom-1 *:before:left-0 *:before:bg-primary *:before:w-0 *:hover:before:w-full *:before:transition-all *:before:duration-500 *:before:h-1 *:before:rounded-full *:before:z-[-1]">
+
+        <ul className="lg:w-1/2 justify-center flex items-center gap-x-4 *:relative *:text-sm md:*:text-lg *:font-semibold *:cursor-pointer *:before:content-['']  *:before:absolute *:before:-bottom-1 *:before:left-0 *:before:bg-primary *:before:w-0 *:hover:before:w-full *:before:transition-all *:before:duration-500 *:before:h-1 *:before:rounded-full *:before:z-[-1]">
           <li>
-            <Link href={"#about"}>About Us</Link>
+            <Link href="#about">{headerText.nav[0]}</Link>
           </li>
           <li>
-            <Link href={"#sevices"}>Services</Link>
+            <Link href="#services">{headerText.nav[1]}</Link>
           </li>
           <li>
-            <Link href={"#join"}>Join Us</Link>
+            <Link href="#join">{headerText.nav[2]}</Link>
           </li>
         </ul>
       </nav>
-      <div className="hidden lg:flex items-center justify-end w-1/3 gap-x-4">
-        <Link href={"#contact"}>
-          <Button>Get in Touch</Button>
+
+      <div className="items-center justify-end hidden w-1/3 lg:flex gap-x-4">
+        <Link href={`/${switchTo}`}>
+          <Button variant="link">
+            {lang === "en" ? "العربية" : "English"}
+          </Button>
+        </Link>
+        <Link href="#contact">
+          <Button>{headerText.buttons.contact}</Button>
         </Link>
         {user ? (
           <UserActions session={user} />
         ) : (
           <Link href={"/login"}>
-            <Button variant="outline">Create Your First Menu</Button>
+            <Button variant="outline">{headerText.buttons.create}</Button>
           </Link>
         )}
       </div>

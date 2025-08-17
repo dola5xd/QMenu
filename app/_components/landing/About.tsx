@@ -2,29 +2,15 @@ import Image from "next/image";
 import Waves from "../ui/Waves";
 import SectionHeader from "../ui/SectionHeader";
 
-const features = [
-  {
-    title: "No Design Skills Needed",
-    description:
-      "Easily build beautiful, modern digital menus tailored to your brand without needing a designer.",
-    image: "/assets/illustrations/About/process.svg",
-  },
-  {
-    title: "Instant QR Code Generation",
-    description:
-      "Generate QR codes for your menu with a single click ready to print or share anywhere.",
-    image: "/assets/illustrations/About/qr.svg",
-  },
-  {
-    title: "Empowering Local Businesses",
-    description:
-      "QMenu helps cafés and restaurants create modern menus and share them with QR codes quickly and effortlessly.",
+type AboutProps = {
+  aboutText: {
+    heading: string;
+    description: string;
+    features: { title: string; description: string; image: string }[];
+  };
+};
 
-    image: "/assets/illustrations/About/relax.svg",
-  },
-];
-
-function About() {
+function About({ aboutText }: AboutProps) {
   return (
     <section
       id="about"
@@ -34,16 +20,14 @@ function About() {
 
       <div className="flex flex-col text-center gap-y-4 xl:mt-4">
         <div className="flex flex-col items-center justify-center text-center gap-y-6">
-          <SectionHeader>About Us</SectionHeader>
+          <SectionHeader>{aboutText.heading}</SectionHeader>
           <p className="max-w-sm text-xs sm:text-base sm:max-w-3xl">
-            QMenu is a smart digital tool that helps café and restaurant owners
-            create beautifully branded menus and share them through QR codes in
-            just minutes. No tech skills required!
+            {aboutText.description}
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-8 mt-10 lg:grid-cols-3">
-          {features.map((feature, i) => (
+          {aboutText.features.map((feature, i) => (
             <div
               key={i}
               className="flex flex-col items-center justify-center p-6 text-center transition-transform duration-300 border gap-y-2 bg-white/10 backdrop-blur-sm rounded-2xl border-white/10 hover:scale-102"

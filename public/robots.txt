@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /Designs
+Disallow: /menus
+Disallow: /account
+
+Sitemap: https://q-menu-delta.vercel.app/sitemap.xml

@@ -24,7 +24,6 @@ function ContactForm() {
 
   const onSubmit = async (data: ContactFormData) => {
     console.log(data);
-    // Optionally send to backend/email service
     reset();
   };
 

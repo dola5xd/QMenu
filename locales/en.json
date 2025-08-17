@@ -1,0 +1,93 @@
+{
+  "header": {
+    "nav": ["About Us", "Services", "Join Us"],
+    "buttons": {
+      "create": "Create Your First Menu",
+      "contact": "Get in Touch"
+    }
+  },
+  "hero": {
+    "headline": "Let's",
+    "rotating": [
+      "Create your menu.",
+      "Brand your menu.",
+      "Customize your menu.",
+      "Generate a QR code.",
+      "Share your menu."
+    ],
+    "subtitle": "Design stunning, fully branded digital menus and generate QR codes for your café, restaurant, or food business all in just a few minutes, no technical skills needed.",
+    "cta": "Start Now – It’s Free"
+  },
+  "about": {
+    "heading": "About Us",
+    "description": "QMenu is a smart digital tool that helps café and restaurant owners create beautifully branded menus and share them through QR codes in just minutes. No tech skills required!",
+    "features": [
+      {
+        "title": "No Design Skills Needed",
+        "description": "Easily build beautiful, modern digital menus tailored to your brand without needing a designer.",
+        "image": "/assets/illustrations/About/process.svg"
+      },
+      {
+        "title": "Instant QR Code Generation",
+        "description": "Generate QR codes for your menu with a single click ready to print or share anywhere.",
+        "image": "/assets/illustrations/About/qr.svg"
+      },
+      {
+        "title": "Empowering Local Businesses",
+        "description": "QMenu helps cafés and restaurants create modern menus and share them with QR codes quickly and effortlessly.",
+        "image": "/assets/illustrations/About/relax.svg"
+      }
+    ]
+  },
+  "services": {
+    "heading": "Our Services",
+    "items": [
+      {
+        "title": "Custom Menu Builder",
+        "description": "Effortlessly design and structure your café or restaurant menu using our intuitive drag-and-drop builder. Whether you're adding categories, dishes, or custom options you’ll have full control without needing any coding or design experience.",
+        "image": "/assets/illustrations/Services/build.svg"
+      },
+      {
+        "title": "QR Code Generator",
+        "description": "Instantly generate high-quality, scannable QR codes that link directly to your digital menu. Perfect for printing on tables, flyers, or displays making it easier than ever for customers to access your offerings with a simple scan.",
+        "image": "/assets/illustrations/Services/Qr-code.svg"
+      },
+      {
+        "title": "Branding & Themes",
+        "description": "Keep your brand front and center with full customization options. From your logo to your colors, fonts, and menu layout make sure your digital presence reflects your café’s unique identity and atmosphere.",
+        "image": "/assets/illustrations/Services/Branding.svg"
+      },
+      {
+        "title": "Real-time Updates",
+        "description": "Need to update your prices, change availability, or run a new promotion? QMenu lets you make instant changes to your menu from any device ensuring your customers always see the latest version.",
+        "image": "/assets/illustrations/Services/update.svg"
+      }
+    ]
+  },
+  "join": {
+    "heading": "Ready to digitize your menu?",
+    "description": "Join QMenu and start creating beautiful, interactive menus for your café or restaurant. Generate QR codes, manage updates in real-time, and keep your brand consistent all in minutes.",
+    "buttons": {
+      "getStarted": "Get Started Free",
+      "contact": "Contact Us"
+    }
+  },
+  "contact": {
+    "heading": "Contact Us",
+    "description": "Have questions? Fill out the form below and we’ll get back to you shortly."
+  },
+  "footer": {
+    "brand": {
+      "title": "QMenu",
+      "description": "Simple QR menus for modern cafés and restaurants."
+    },
+    "pages": ["Home", "About", "Services", "Join Us", "Contact Us"],
+    "support": ["FAQs", "Privacy Policy", "Terms of Service"],
+    "startNow": {
+      "heading": "Start Now",
+      "description": "Sign up and build your first digital menu today.",
+      "button": "Get Started"
+    },
+    "copyright": "QMenu. All rights reserved."
+  }
+}

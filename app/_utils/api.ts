@@ -37,7 +37,6 @@ export async function getUserByID(ID: string): Promise<DBUser | null> {
     .limit(1)
     .get();
 
-  console.log("ID: ", ID);
   if (snapshot.empty) return null;
 
   const doc = snapshot.docs[0];

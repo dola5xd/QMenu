@@ -19,3 +19,5 @@ export function generatePalette(baseColor: string) {
     muted: color.desaturate(0.3).toHex(),
   };
 }
+
+export const isRTL = (text: string) => /[\u0600-\u06FF]/.test(text);
