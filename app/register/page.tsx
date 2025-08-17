@@ -11,6 +11,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/_components/ui/button";
 import { Input } from "@/_components/ui/input";
+import Link from "next/link";
 
 const schema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -164,9 +165,9 @@ export default function RegisterPage() {
 
         <p className="text-xs text-center xl:text-sm text-secondary/75">
           Already have an account?{" "}
-          <a href="/login" className="text-secondary hover:underline">
+          <Link href="/login" className="text-secondary hover:underline">
             Sign In
-          </a>
+          </Link>
         </p>
       </form>
     </main>

@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { redirect } from "next/navigation";
 import { Button } from "@/_components/ui/button";
 import { Input } from "@/_components/ui/input";
+import Link from "next/link";
 
 const schema = z.object({
   email: z.string().email(),
@@ -138,9 +139,9 @@ export default function LoginPage() {
         </div>
         <p className="text-xs text-center sm:text-sm text-secondary/75">
           Don’t have an account?{" "}
-          <a href="/register" className="text-secondary hover:underline">
+          <Link href="/register" className="text-secondary hover:underline">
             Register
-          </a>
+          </Link>
         </p>
       </form>
     </main>
