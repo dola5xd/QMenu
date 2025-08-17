@@ -1,17 +1,21 @@
 import Link from "next/link";
 import RotatingText from "../ui/RotatingText";
 import { Button } from "../ui/button";
-import { isRTL } from "@/_lib/utils";
 
-function Hero({ heroText }) {
-  const isRTLText = isRTL(heroText.rotating.at(0));
+type HeroProps = {
+  heroText: {
+    headline: string;
+    subtitle: string;
+    cta: string;
+    rotating: string[];
+  };
+};
+
+function Hero({ heroText }: HeroProps) {
   return (
     <section className="flex flex-col-reverse md:items-center md:justify-between w-full px-5 sm:px-10 md:px-20 py-4 gap-x-8 md:flex-row min-h-[50dvh] md:min-h-[70dvh] xl:min-h-[75dvh] justify-center">
       <div className="flex flex-col items-center justify-center w-full gap-y-7 ">
-        <h1
-          dir={isRTLText ? "rtl" : "ltr"}
-          className="flex items-center gap-x-1.5 text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold"
-        >
+        <h1 className="flex items-center gap-x-1.5 text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
           {heroText.headline}{" "}
           <RotatingText
             texts={heroText.rotating}

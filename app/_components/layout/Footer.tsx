@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Waves from "../ui/Waves";
 import { Button } from "../ui/button";
+import FooterNav from "../ui/FooterNav";
 
 type FooterProps = {
   footerText: {
@@ -27,28 +28,12 @@ function Footer({ footerText }: FooterProps) {
 
         <div className="flex flex-col gap-y-2">
           <h4 className="text-lg font-semibold text-white">Pages</h4>
-          <ul className="flex flex-col gap-y-1 *:cursor-pointer *:hover:underline">
-            <li>
-              <Link href="/">{footerText.pages[0]}</Link>
-            </li>
-            <li>
-              <Link href="#about">{footerText.pages[1]}</Link>
-            </li>
-            <li>
-              <Link href="#services">{footerText.pages[2]}</Link>
-            </li>
-            <li>
-              <Link href="#join">{footerText.pages[3]}</Link>
-            </li>
-            <li>
-              <Link href="#contact">{footerText.pages[4]}</Link>
-            </li>
-          </ul>
+          <FooterNav pages={footerText.pages} />
         </div>
 
         <div className="flex flex-col gap-y-2">
           <h4 className="text-lg font-semibold text-white">Support</h4>
-          <ul className="flex flex-col gap-y-1 *:cursor-pointer *:hover:underline">
+          <ul className="flex flex-col gap-y-1 cursor-pointer hover:underline">
             {footerText.support.map((s, i) => (
               <li key={i}>{s}</li>
             ))}
@@ -68,7 +53,7 @@ function Footer({ footerText }: FooterProps) {
         </div>
       </div>
 
-      <div className="z-0 pt-6 mt-12 text-xs text-center border-t border-muted text-foreground">
+      <div className="z-0 pt-6 mt-12 text-xs text-center border-t border-muted text-white">
         &copy; {new Date().getFullYear()} {footerText.copyright}
       </div>
     </footer>

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Cairo } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./_providers/Providers";
-import { LangProvider } from "./_providers/LangProvider";
 import Lenis from "@/_components/layout/Lenis";
 
 const InterFont = Inter({
@@ -16,6 +15,7 @@ const CairoFont = Cairo({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://q-menu-delta.vercel.app/"),
   title: "QMenu | Effortless Digital Menus for Cafés & Restaurants",
   description:
     "QMenu helps cafés and restaurants create beautiful digital menus in minutes. QR-ready, multilingual, and customizable — no coding, no hassle.",
@@ -67,9 +67,7 @@ export default function RootLayout({
         className={`${InterFont.variable} ${CairoFont.variable} antialiased  text-primary font-inter min-h-dvh w-screen bg-background overflow-x-hidden`}
       >
         <Lenis>
-          <LangProvider>
-            <Providers>{children}</Providers>
-          </LangProvider>
+          <Providers>{children}</Providers>
         </Lenis>
       </body>
     </html>

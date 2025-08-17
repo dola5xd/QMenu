@@ -5,6 +5,8 @@ import { authOptions, DBUser } from "@/_lib/authOptions";
 import { getUserByID } from "@/_utils/api";
 import UserActions from "../ui/UserActions";
 import { Button } from "../ui/button";
+import NavLinks from "../ui/NavLinks";
+import ContactButton from "../ui/ContactButton";
 
 type HeaderProps = {
   lang: "en" | "ar";
@@ -40,17 +42,7 @@ async function Header({ lang = "en", headerText }: HeaderProps) {
           </span>
         </div>
 
-        <ul className="lg:w-1/2 justify-center flex items-center gap-x-4 *:relative *:text-sm md:*:text-lg *:font-semibold *:cursor-pointer *:before:content-['']  *:before:absolute *:before:-bottom-1 *:before:left-0 *:before:bg-primary *:before:w-0 *:hover:before:w-full *:before:transition-all *:before:duration-500 *:before:h-1 *:before:rounded-full *:before:z-[-1]">
-          <li>
-            <Link href="#about">{headerText.nav[0]}</Link>
-          </li>
-          <li>
-            <Link href="#services">{headerText.nav[1]}</Link>
-          </li>
-          <li>
-            <Link href="#join">{headerText.nav[2]}</Link>
-          </li>
-        </ul>
+        <NavLinks nav={headerText.nav} />
       </nav>
 
       <div className="items-center justify-end hidden w-1/3 lg:flex gap-x-4">
@@ -59,9 +51,7 @@ async function Header({ lang = "en", headerText }: HeaderProps) {
             {lang === "en" ? "العربية" : "English"}
           </Button>
         </Link>
-        <Link href="#contact">
-          <Button>{headerText.buttons.contact}</Button>
-        </Link>
+        <ContactButton text={headerText.buttons.contact} />
         {user ? (
           <UserActions session={user} />
         ) : (
